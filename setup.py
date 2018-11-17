@@ -20,6 +20,7 @@ setup(
         'Operating System :: OS Independent',
     ],
     py_modules=['sebak'],
+    zip_safe=False,
     package_dir={'': './src'},
     packages=find_packages('./src'),
     install_requires=(

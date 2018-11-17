@@ -51,15 +51,15 @@ The value of `"network-id"`, `sebak-test-network` is the 'network id'.
 For the nature of transaction of SEBAK, one `Transction` can have multple `Operation`s. `Operation` is the base unit of operating accounts like creating new account and payment. Currently SEBAK supports various kind of operations, but most of users will use `CreateAccount` and `Payment` operations.
 
 ```python
-from sebak.operation import create_account, payment
+>>> from sebak.operation import create_account, payment
 
-target = 'GB3AOQD2M5AKMNWUP2HFCVQYFQNGTAFTJ24BHZ56ONSGGOXMG3EBO6OE'
-amount = '100'
-payment_operation = payment(target, amount)
+>>> target = 'GB3AOQD2M5AKMNWUP2HFCVQYFQNGTAFTJ24BHZ56ONSGGOXMG3EBO6OE'
+>>> amount = '100'
+>>> payment_operation = payment(target, amount)
 
-target = 'GD54SAKFHJ2QSBLEHZIQV3UWQ42OD6VQ6HKF6TN6F72US3AUQNDSONEV'
-amount = '1000000'
-create_account_operation = create_account(target, amount)
+>>> target = 'GD54SAKFHJ2QSBLEHZIQV3UWQ42OD6VQ6HKF6TN6F72US3AUQNDSONEV'
+>>> amount = '1000000'
+>>> create_account_operation = create_account(target, amount)
 ```
 
 * `amount` must be `str`.
@@ -71,12 +71,11 @@ At this time, you can up to `100` operations in one transaction. This number can
 ### Transaction
 
 ```python
-from sebak.transaction import Transaction
+>>> from sebak.transaction import Transaction
 
-source = 'SDJLIFJ3PMT22C2IZAR4PY2JKTGPTACPX2NMT5NPERC2SWRWUE4HWOEE'
-operations = (payment_operation, create_account_operation)
-sequence_id = 1
-tx = Transaction(sequence_id, operations)
+>>> operations = (payment_operation, create_account_operation)
+>>> sequence_id = 1
+>>> tx = Transaction(sequence_id, operations)
 ```
 
 * `sequence_id` is the last state of account. It will be varied when your account state is changed, so you should check the latest `sequence_id` from network. You can get the laetst `sequence_id` from https://bosnet.github.io/sebak/api/#accounts-account-details-get .
@@ -85,12 +84,80 @@ tx = Transaction(sequence_id, operations)
 
 You must sign you transaction instance before sengding transaction.
 ```python
-network_id = b'sebak-test-network'
-tx.sign(kp, network_id)
+>>> from sebak import keypair
+
+>>> source = 'SDJLIFJ3PMT22C2IZAR4PY2JKTGPTACPX2NMT5NPERC2SWRWUE4HWOEE'
+>>> kp = keypair.from_seed(source)
+>>> network_id = b'sebak-test-network'
+>>> tx.sign(kp, network_id)
+>>> print(tx.hash)
+8PqQDCrvewu6JvGqHgyagESwjQ7zAeTKGJHeJmVi2X4n
+>>> print(tx.signature)
+nU46BuF6f1PUUCoHoy3EXMxdibvRC6ZYyzLPsr4aNJYJnDDvSdcn52Qf9CGy5R9UbkMgW6mdKGwrHNvd3oCoRsp
 ```
 
 * `kp` must be generated from your `secret-seed`, not `public address'.
 * `network_id` must be `bytes`.
+
+If you successfully sign your transaction, you can serialize your transaction instance to 'json', or 'dict',
+
+```python
+>>> json_string = tx.to_json()
+>>> print(json_string)
+{
+  "H": {
+    "version": "1",
+    "created": "2018-11-17 14:21:58-09.00",
+    "signature": "nU46BuF6f1PUUCoHoy3EXMxdibvRC6ZYyzLPsr4aNJYJnDDvSdcn52Qf9CGy5R9UbkMgW6mdKGwrHNvd3oCoRsp"
+  },
+  "B": {
+    "source": "GAG5EESGOZIHTKK5N2NBHX25EWRC3S3TWZT7RMCSBX65A3KTJKILQKCF",
+    "fee": "20000",
+    "sequence_id": 1,
+    "operations": [
+      {
+        "H": {
+          "type": "payment"
+        },
+        "B": {
+          "amount": "100",
+          "target": "GB3AOQD2M5AKMNWUP2HFCVQYFQNGTAFTJ24BHZ56ONSGGOXMG3EBO6OE"
+        }
+      },
+      {
+        "H": {
+          "type": "create-account"
+        },
+        "B": {
+          "amount": "1000000",
+          "target": "GD54SAKFHJ2QSBLEHZIQV3UWQ42OD6VQ6HKF6TN6F72US3AUQNDSONEV",
+          "linked": ""
+        }
+      }
+    ]
+  }
+}
+```
+
+```python
+>>> d = tx.to_dict()
+
+from pprint import pprint
+>>> pprint(d)
+{ 'B': { 'fee': '20000',
+         'operations': [ { 'B': { 'amount': '100',
+                                  'target': 'GB3AOQD2M5AKMNWUP2HFCVQYFQNGTAFTJ24BHZ56ONSGGOXMG3EBO6OE'},
+                           'H': {'type': 'payment'}},
+                         { 'B': { 'amount': '1000000',
+                                  'linked': '',
+                                  'target': 'GD54SAKFHJ2QSBLEHZIQV3UWQ42OD6VQ6HKF6TN6F72US3AUQNDSONEV'},
+                           'H': {'type': 'create-account'}}],
+         'sequence_id': 1,
+         'source': 'GAG5EESGOZIHTKK5N2NBHX25EWRC3S3TWZT7RMCSBX65A3KTJKILQKCF'},
+  'H': { 'created': '2018-11-17 14:21:58-09.00',
+         'signature': 'nU46BuF6f1PUUCoHoy3EXMxdibvRC6ZYyzLPsr4aNJYJnDDvSdcn52Qf9CGy5R9UbkMgW6mdKGwrHNvd3oCoRsp',
+         'version': '1'}}
+```
 
 The API of sending transaction, please see https://bosnet.github.io/sebak/api/#trasactions-transactions-post .
 

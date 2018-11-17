@@ -62,7 +62,7 @@ class Transaction:
         return base58.b58encode(kp.sign(sig_data)).decode('utf-8')
 
     def sign(self, kp, network_id):
-        self.source = self.source
+        self.source = kp.address().decode('utf-8')
         self.signature = self.get_signature(kp, network_id)
 
         return
@@ -95,8 +95,8 @@ class Transaction:
             ),
         )
 
-    def to_json(self):
-        return json.dumps(self.to_dict())
+    def to_json(self, indent=None):
+        return json.dumps(self.to_dict(), indent=indent)
 
     @classmethod
     def from_json(cls, b):
