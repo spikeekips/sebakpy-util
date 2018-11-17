@@ -55,6 +55,7 @@ create_account_operation = create_account(target, amount)
 ```
 
 * `amount` must be `str`.
+* the unit of `amount` must be `GON`, `1BOS` is `10000000GON`.
 * `target` should be valid address of keypair.
 
 At this time, you can up to `100` operations in one transaction. This number can be adjusted. This limit also can be checked by node information.
