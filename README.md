@@ -9,6 +9,14 @@
 * python3.6 o rlater.
 * Windows environment was not tested yet.
 
+```sh
+$ python --version
+Python 3.6.5
+
+$ git clone https://github.com/spikeekips/sebakpy-util.git
+$ python setup.py install
+```
+
 ## Test
 
 ```sh

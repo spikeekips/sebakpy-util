@@ -102,3 +102,8 @@ venv.bak/
 
 # mypy
 .mypy_cache/
+
+.*.sw?
+.sw?
+.DS_Store
+tmp
