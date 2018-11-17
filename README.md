@@ -90,10 +90,10 @@ You must sign you transaction instance before sengding transaction.
 >>> kp = keypair.from_seed(source)
 >>> network_id = b'sebak-test-network'
 >>> tx.sign(kp, network_id)
->>> print(tx.hash)
-8PqQDCrvewu6JvGqHgyagESwjQ7zAeTKGJHeJmVi2X4n
->>> print(tx.signature)
-nU46BuF6f1PUUCoHoy3EXMxdibvRC6ZYyzLPsr4aNJYJnDDvSdcn52Qf9CGy5R9UbkMgW6mdKGwrHNvd3oCoRsp
+>>> tx.hash
+'8PqQDCrvewu6JvGqHgyagESwjQ7zAeTKGJHeJmVi2X4n'
+>>> tx.signature
+'nU46BuF6f1PUUCoHoy3EXMxdibvRC6ZYyzLPsr4aNJYJnDDvSdcn52Qf9CGy5R9UbkMgW6mdKGwrHNvd3oCoRsp'
 ```
 
 * `kp` must be generated from your `secret-seed`, not `public address'.
