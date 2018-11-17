@@ -159,6 +159,38 @@ from pprint import pprint
          'version': '1'}}
 ```
 
+So you are ready to submit transactons, you can just post your json to SEBAK node.
+
+```sh
+$ curl -v \
+    -XPOST \
+    -H 'Content-Type: application/json' \
+    -d @your-transaction.json \
+    https://testnet-sebak.blockchainos.org/api/v1/transactions
+...
+> POST /api/v1/transactions HTTP/2
+> Host: testnet-sebak.blockchainos.org
+> User-Agent: curl/7.62.0
+> Accept: */*
+> Content-Type: application/json
+> Content-Length: 749
+>
+* Connection state changed (MAX_CONCURRENT_STREAMS == 100)!
+* We are completely uploaded and fine
+< HTTP/2 200
+< content-type: application/problem+json
+< x-ratelimit-limit: 100
+< x-ratelimit-remaining: 98
+< x-ratelimit-reset: 1542432619
+< date: Sat, 17 Nov 2018 05:30:08 GMT
+< content-length: 101
+< via: 1.1 google
+< alt-svc: clear
+<
+* Connection #0 to host testnet-sebak.blockchainos.org left intact
+...
+```
+
 The API of sending transaction, please see https://bosnet.github.io/sebak/api/#trasactions-transactions-post .
 
 ## Operations
